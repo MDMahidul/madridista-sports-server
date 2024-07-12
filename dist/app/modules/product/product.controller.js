@@ -22,10 +22,20 @@ const createProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: 'Product added successfully',
+        message: 'Product added successfully!',
+        data: result,
+    });
+}));
+const getAllProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_service_1.ProductService.getAllProductFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Products data retrived successfully!',
         data: result,
     });
 }));
 exports.ProductControllers = {
-    createProduct
+    createProduct,
+    getAllProducts,
 };

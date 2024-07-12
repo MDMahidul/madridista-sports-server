@@ -13,7 +13,7 @@ const createProductValidationSchema = zod_1.z.object({
             .min(0, 'Ratings cannot be less than 0')
             .max(5, 'Ratings cannot be more than 5'),
         quantity: zod_1.z.number().nonnegative('Quantity must be a positive number'),
-        off: zod_1.z.number().nonnegative('Off must be a positive number'),
+        off: zod_1.z.number().nonnegative('Off must be a positive number').optional(),
         description: zod_1.z.string().nonempty('Product description is required!'),
         imageLink: zod_1.z.string().nonempty('Product image link is required!'),
         isDeleted: zod_1.z.boolean().default(false),

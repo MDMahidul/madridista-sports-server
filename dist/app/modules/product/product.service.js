@@ -15,6 +15,11 @@ const createProductIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     const result = yield product_model_1.Product.create(payload);
     return result;
 });
+const getAllProductFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield product_model_1.Product.find().sort({ createdAt: -1 });
+    return result;
+});
 exports.ProductService = {
-    createProductIntoDB
+    createProductIntoDB,
+    getAllProductFromDB,
 };

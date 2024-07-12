@@ -6,6 +6,7 @@ const productSchema = new Schema<TProduct, ProductModel>(
     name: {
       type: String,
       required: [true, 'Product name is required!'],
+      unique:true
     },
     brand: {
       type: String,
@@ -33,7 +34,7 @@ const productSchema = new Schema<TProduct, ProductModel>(
     },
     off: {
       type: Number,
-      required: true,
+      required: false,
       min: [0, 'Off must be a positive number'],
     },
     description: {
@@ -55,9 +56,14 @@ const productSchema = new Schema<TProduct, ProductModel>(
   },
 );
 
-productSchema.statics.isProductExists=async function(name:string):Promise<boolean>{
-  const count = await this.countDocuments({ name });
-    return count > 0;
-}
+// create query middleware
+productSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+productSchema.statics.isProductExists = async function (id: string) {
+  return await Product.findById(id);
+};
 
 export const Product = model<TProduct,ProductModel>('Product',productSchema);

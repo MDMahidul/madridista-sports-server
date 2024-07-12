@@ -10,4 +10,5 @@ const product_validation_1 = require("./product.validation");
 const product_controller_1 = require("./product.controller");
 const router = express_1.default.Router();
 router.post('/add-product', (0, validateRequest_1.default)(product_validation_1.productValidations.createProductValidationSchema), product_controller_1.ProductControllers.createProduct);
+router.get('/all-products', product_controller_1.ProductControllers.getAllProducts);
 exports.ProductRouters = router;

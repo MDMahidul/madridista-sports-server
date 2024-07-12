@@ -42,7 +42,7 @@ const productSchema = new mongoose_1.Schema({
     },
     off: {
         type: Number,
-        required: true,
+        required: false,
         min: [0, 'Off must be a positive number'],
     },
     description: {
