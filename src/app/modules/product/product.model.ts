@@ -52,7 +52,7 @@ const productSchema = new Schema<TProduct, ProductModel>(
     },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt timestamps
+    timestamps: true, 
   },
 );
 

@@ -9,6 +9,8 @@ router.post('/add-product',validateRequest(productValidations.createProductValid
 
 router.get('/all-products',ProductControllers.getAllProducts);
 
+router.get('/get-product/:id',ProductControllers.getSingleProduct);
+
 router.put('/update-product/:id',validateRequest(productValidations.updateProductValidationSchema),ProductControllers.updateSingleProduct);
 
 router.delete('/delete-product/:id',ProductControllers.deleteSingleProduct);
