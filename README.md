@@ -237,7 +237,12 @@ npm run start:prod
         
         ```
 
+<<<<<<< HEAD
 ### Order Routes:
+=======
+    ### Order Routes:
+
+>>>>>>> 80735884417447e6f7bcf2f1d3a0cefefcc33682
 - **Create Order**
     - **Route**: /api/order/add-order (POST)
     - Customer information and cart items will come from body
