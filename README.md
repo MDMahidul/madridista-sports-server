@@ -10,8 +10,8 @@
   - [Configuration](#configuration)
   - [Running the Server](#running-the-server)
 - [API Endpoints](#api-endpoints)
-  - [Products](#products)
-  - [Orders](#orders)
+  - [Product](#product)
+  - [Order](#order)
 - [Error Handling](#error-handling)
 - [Live Link](#live-link)
 
@@ -237,8 +237,7 @@ npm run start:prod
         
         ```
 
-    ### Order Routes:
-
+### Order Routes:
 - **Create Order**
     - **Route**: /api/order/add-order (POST)
     - Customer information and cart items will come from body
