@@ -8,18 +8,62 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const product_model_1 = require("./product.model");
 const createProductIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingProduct = yield product_model_1.Product.findOne({ name: payload.name });
+    if (existingProduct) {
+        throw new Error('Product with the same name already exists');
+    }
     const result = yield product_model_1.Product.create(payload);
     return result;
 });
-const getAllProductFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield product_model_1.Product.find().sort({ createdAt: -1 });
+const getAllProductFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { category, name } = query;
+    const searchCriteria = {};
+    if (category) {
+        searchCriteria.category = new RegExp(category, 'i');
+    }
+    if (name) {
+        searchCriteria.name = new RegExp(name, 'i');
+    }
+    const result = yield product_model_1.Product.find(searchCriteria).sort({ createdAt: -1 });
+    return result;
+});
+const updateSingleProductIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const isProductExists = yield product_model_1.Product.isProductExists(id);
+    if (!isProductExists) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
+    const result = yield product_model_1.Product.findByIdAndUpdate(id, payload, { new: true });
+    return result;
+});
+const getSingleProductFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const isProductExists = yield product_model_1.Product.isProductExists(id);
+    if (!isProductExists) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
+    const result = yield product_model_1.Product.findById(id);
+    return result;
+});
+const deleteSingleProductIntoDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const isProductExists = yield product_model_1.Product.isProductExists(id);
+    if (!isProductExists) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'No Data Found');
+    }
+    const result = yield product_model_1.Product.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
     return result;
 });
 exports.ProductService = {
     createProductIntoDB,
     getAllProductFromDB,
+    updateSingleProductIntoDB,
+    deleteSingleProductIntoDB,
+    getSingleProductFromDB,
 };

@@ -1,17 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handleZodError = void 0;
+// create zod error handler
 const handleZodError = (err) => {
-    const errorMessages = err.issues.map((issue) => {
+    const errorSources = err.issues.map((issue) => {
         return {
             path: issue === null || issue === void 0 ? void 0 : issue.path[issue.path.length - 1],
-            message: issue.message,
+            message: issue === null || issue === void 0 ? void 0 : issue.message,
         };
     });
     const statusCode = 400;
     return {
         statusCode,
-        message: 'Validation Error!',
-        errorMessages,
+        message: 'Validation error!',
+        errorSources,
     };
 };
-exports.default = handleZodError;
+exports.handleZodError = handleZodError;

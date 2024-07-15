@@ -6,7 +6,7 @@ const router = Router();
 
 const modelRoutes = [
   {
-    path: '/',
+    path: '/product',
     route: ProductRouters,
   },
   {

@@ -1,21 +1,20 @@
-import { TErrorMessages, TGenericErrorResponse } from '../interface/error';
+import { TErrorSources, TGenereicErrorResponse } from '../interface/error';
 
-const handleDuplicateError = (err: any): TGenericErrorResponse => {
+const handleDuplicateError = (err: any): TGenereicErrorResponse => {
   const match = err.message.match(/"([^"]*)"/);
   const extractedMessage = match && match[1];
-  const errorMessages: TErrorMessages = [
+  const errorSources: TErrorSources = [
     {
       path: '',
-      message: `${extractedMessage} is already exist`,
+      message: `${extractedMessage} is alreadt exist!`,
     },
   ];
-
   const statusCode = 400;
 
   return {
     statusCode,
-    message: 'Duplicate Data found!',
-    errorMessages,
+    message: 'Duplicate data found!',
+    errorSources,
   };
 };
 

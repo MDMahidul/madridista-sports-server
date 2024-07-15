@@ -14,5 +14,5 @@ export type TProduct = {
 };
 
 export interface ProductModel extends Model<TProduct> {
-  isProductExists(name: string): Promise<boolean>;
+  isProductExists(id: string): Promise<boolean>;
 }

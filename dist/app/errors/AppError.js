@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// class for handle errors and show messages
 class AppError extends Error {
     constructor(statusCode, message, stack = '') {
         super(message);

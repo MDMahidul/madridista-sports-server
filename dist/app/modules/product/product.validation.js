@@ -19,4 +19,25 @@ const createProductValidationSchema = zod_1.z.object({
         isDeleted: zod_1.z.boolean().default(false),
     }),
 });
-exports.productValidations = { createProductValidationSchema };
+const updateProductValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        name: zod_1.z.string().nonempty('Product name is required!').optional(),
+        brand: zod_1.z.string().nonempty('Product brand is required!').optional(),
+        category: zod_1.z.string().nonempty('Product category is required!').optional(),
+        price: zod_1.z.number().nonnegative('Price must be a positive number').optional(),
+        ratings: zod_1.z
+            .number()
+            .min(0, 'Ratings cannot be less than 0')
+            .max(5, 'Ratings cannot be more than 5')
+            .optional(),
+        quantity: zod_1.z.number().nonnegative('Quantity must be a positive number').optional(),
+        off: zod_1.z.number().nonnegative('Off must be a positive number').optional(),
+        description: zod_1.z.string().nonempty('Product description is required!').optional(),
+        imageLink: zod_1.z.string().nonempty('Product image link is required!').optional(),
+        isDeleted: zod_1.z.boolean().default(false),
+    }),
+});
+exports.productValidations = {
+    createProductValidationSchema,
+    updateProductValidationSchema,
+};

@@ -3,6 +3,11 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { ProductService } from './product.service';
 
+type TProductQuery= {
+  category?: string;
+  name?: string;
+}
+
 const createProduct = catchAsync(async (req, res) => {
   const result = await ProductService.createProductIntoDB(req.body);
 
@@ -14,40 +19,10 @@ const createProduct = catchAsync(async (req, res) => {
   });
 });
 
-/* const getAllProducts = catchAsync(async (req, res) => {
-  try {
-    //const { searchTerm } = req.query;
-    const result = await ProductService.getAllProductFromDB(
-      req.query,
-    );
 
-    if (result.length === 0) {
-      return sendResponse(res, {
-        statusCode: httpStatus.NOT_FOUND,
-        success: false,
-        message: 'No products found in the database!',
-        data: null,
-      });
-    }
-
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Products data retrieved successfully!',
-      data: result,
-    });
-  } catch (error) {
-    sendResponse(res, {
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      success: false,
-      message: 'An error occurred while retrieving products data!',
-      data: null,
-    });
-  }
-}); */
 
 const getAllProducts = catchAsync(async (req, res) => {
-  const { category, name } = req.query;
+  const { category, name } = req.query as unknown as TProductQuery;
   const result = await ProductService.getAllProductFromDB({ category, name });
 
   if (result.length === 0) {

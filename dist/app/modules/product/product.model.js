@@ -15,6 +15,7 @@ const productSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: [true, 'Product name is required!'],
+        unique: true
     },
     brand: {
         type: String,
@@ -59,12 +60,16 @@ const productSchema = new mongoose_1.Schema({
         default: false,
     },
 }, {
-    timestamps: true, // Adds createdAt and updatedAt timestamps
+    timestamps: true,
 });
-productSchema.statics.isProductExists = function (name) {
+// create query middleware
+productSchema.pre("find", function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+productSchema.statics.isProductExists = function (id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const count = yield this.countDocuments({ name });
-        return count > 0;
+        return yield exports.Product.findById(id);
     });
 };
 exports.Product = (0, mongoose_1.model)('Product', productSchema);

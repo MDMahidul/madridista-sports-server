@@ -2,8 +2,11 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
-import QueryBuilder from '../../builder/QueryBuilder';
-import { ProductSearchableFields } from './product.constant';
+
+type TQuery ={
+  category?: string;
+  name?: string;
+}
 
 const createProductIntoDB = async (payload: TProduct) => {
   const existingProduct = await Product.findOne({ name: payload.name });
@@ -14,19 +17,10 @@ const createProductIntoDB = async (payload: TProduct) => {
   return result;
 };
 
-/* const getAllProductFromDB = async (query: Record<string, unknown>) => {
-  const productQuery = new QueryBuilder(Product.find(), query)
-    .search(ProductSearchableFields)
-    .filter()
-    .sort();
 
-  const result = await productQuery.modelQuery;
-  return result;
-}; */
-
-const getAllProductFromDB = async (query) => {
+const getAllProductFromDB = async (query: TQuery): Promise<TProduct[]> => {
   const { category, name } = query;
-  const searchCriteria = {};
+  const searchCriteria: { [key: string]: any } = {};
 
   if (category) {
     searchCriteria.category = new RegExp(category, 'i');

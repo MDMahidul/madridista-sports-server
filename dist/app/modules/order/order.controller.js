@@ -12,15 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
-const validateRequest = (schema) => {
-    return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        // zod parse data
-        yield schema.parseAsync({
-            body: req.body,
-            cookies: req.cookies,
-        });
-        next();
-    }));
-};
-exports.default = validateRequest;
+exports.OrderController = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const order_service_1 = require("./order.service");
+const createOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderService.createOrderIntoDB(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Order placed successfully!',
+        data: result,
+    });
+}));
+exports.OrderController = { createOrder };

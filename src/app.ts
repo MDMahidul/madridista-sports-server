@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 // main route
-app.use('/api',router)
+app.use('/api', router);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello Madridista!');
