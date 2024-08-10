@@ -3,10 +3,10 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { ProductService } from './product.service';
 
-type TProductQuery= {
+/* type TProductQuery= {
   category?: string;
   name?: string;
-}
+} */
 
 const createProduct = catchAsync(async (req, res) => {
   const result = await ProductService.createProductIntoDB(req.body);
@@ -22,26 +22,14 @@ const createProduct = catchAsync(async (req, res) => {
 
 
 const getAllProducts = catchAsync(async (req, res) => {
-  const { category, name } = req.query as unknown as TProductQuery;
-  const result = await ProductService.getAllProductFromDB({ category, name });
-
-  if (result.length === 0) {
-    return sendResponse(res, {
-      statusCode: httpStatus.NOT_FOUND,
-      success: false,
-      message:
-        category || name
-          ? `No products found matching the criteria`
-          : 'No products found in the database!',
-      data: null,
-    });
-  }
+  const result = await ProductService.getAllProductFromDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Products data retrieved successfully!',
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

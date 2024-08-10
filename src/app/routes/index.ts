@@ -1,10 +1,15 @@
 import { Router } from 'express';
-import { ProductRouters } from '../modules/product/product.routes';
-import { OrderRouters } from '../modules/order/order.routes';
+import { ProductRouters } from '../modules/Product/product.routes';
+import { OrderRouters } from '../modules/Order/order.routes';
+import { UserRoutes } from '../modules/User/user.routes';
 
 const router = Router();
 
 const modelRoutes = [
+  {
+    path: '/users',
+    route: UserRoutes,
+  },
   {
     path: '/product',
     route: ProductRouters,

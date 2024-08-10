@@ -10,11 +10,11 @@ class QueryBuilder<T> {
   }
 
   // create search method
-  search(ProductSearchableFields: string[]) {
-    const searchTerm = this?.query?.searchTerm;
+  search(searchableFields: string[]) {
+    const searchTerm = this?.query?.searchTerm as string;
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
-        $or: ProductSearchableFields.map(
+        $or: searchableFields.map(
           (field) =>
             ({
               [field]: { $regex: searchTerm, $options: 'i' },
@@ -30,7 +30,7 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query };
 
     //filtering
-    const excludeFields = ['searchTerm', 'sort'];
+    const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
 
     // exclude item from query
     excludeFields.forEach((el) => delete queryObj[el]);
@@ -45,9 +45,56 @@ class QueryBuilder<T> {
     const sort =
       (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
 
-    this.modelQuery = this.modelQuery.sort(sort as string);
+    const sortFields = sort.split(',').map((field) => {
+      if (field === 'price') {
+        return { price: 1 };
+      } else if (field === '-price') {
+        return { price: -1 };
+      }else{
+        return {[field]:field.startsWith('-') ? -1 : 1}
+      }
+    });
+
+    this.modelQuery = this.modelQuery.sort(Object.assign({},...sortFields));
 
     return this;
+  }
+
+  //create pagination method
+  paginate() {
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 12;
+    const skip = (page - 1) * limit;
+
+    this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+
+    return this;
+  }
+
+  // filter specific fields
+  fields() {
+    // fields: 'name email' formatting
+    const fields =
+      (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
+
+    this.modelQuery = this.modelQuery.select(fields);
+
+    return this;
+  }
+
+  async countTotal() {
+    const totalQueries = this.modelQuery.getFilter();
+    const total = await this.modelQuery.model.countDocuments(totalQueries);
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const totalPage = Math.ceil(total / limit);
+
+    return {
+      page,
+      limit,
+      total,
+      totalPage,
+    };
   }
 }
 

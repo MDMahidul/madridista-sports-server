@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
-import { Product } from '../product/product.model';
+import { Product } from '../Product/product.model';
 import { TCustomerOrderInfo } from './order.interface';
 import { Order } from './order.model';
 

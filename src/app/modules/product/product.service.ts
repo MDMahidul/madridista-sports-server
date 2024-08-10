@@ -2,11 +2,13 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { ProductSearchableFields } from './product.constant';
 
-type TQuery ={
+/* type TQuery ={
   category?: string;
   name?: string;
-}
+} */
 
 const createProductIntoDB = async (payload: TProduct) => {
   const existingProduct = await Product.findOne({ name: payload.name });
@@ -17,8 +19,7 @@ const createProductIntoDB = async (payload: TProduct) => {
   return result;
 };
 
-
-const getAllProductFromDB = async (query: TQuery): Promise<TProduct[]> => {
+/* const getAllProductFromDB = async (query: TQuery): Promise<TProduct[]> => {
   const { category, name } = query;
   const searchCriteria: { [key: string]: any } = {};
 
@@ -31,6 +32,19 @@ const getAllProductFromDB = async (query: TQuery): Promise<TProduct[]> => {
 
   const result = await Product.find(searchCriteria).sort({ createdAt: -1 });
   return result;
+}; */
+const getAllProductFromDB = async (query: Record<string, unknown>) => {
+  const productQuery = new QueryBuilder(Product.find(), query)
+    .search(ProductSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const meta = await productQuery.countTotal();
+  const result = await productQuery.modelQuery;
+
+  return { result, meta };
 };
 
 const updateSingleProductIntoDB = async (

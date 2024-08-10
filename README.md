@@ -73,7 +73,7 @@ npm run start:prod
 ```
 
 ## API Endpoints
-### Product Routes:
+### Product
 -  **Add Product**
     - **Route**: /api/product/add-product (POST)
     - **Request Body**:
