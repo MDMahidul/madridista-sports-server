@@ -5,28 +5,28 @@ import { TCustomerOrderInfo } from './order.interface';
 import { Order } from './order.model';
 
 const createOrderIntoDB = async (payload: TCustomerOrderInfo) => {
-  const { customerName, email, phone, address, cartItems } = payload;
+  const { customer, cartItems } = payload;
 
   try {
     // first check quantity
     for (const item of cartItems) {
-      const product = await Product.findById(item._id);
+      const product = await Product.findById(item.productId);
       if (!product || product.quantity < item.quantity) {
         throw new AppError(
           httpStatus.BAD_GATEWAY,
-          `Not enough stock for ${item.name}`,
+          `Not enough stock right now !`,
         );
       }
     }
 
     // deduct the item quantity
     for (const item of cartItems) {
-      await Product.findByIdAndUpdate(item._id, {
+      await Product.findByIdAndUpdate(item.productId, {
         $inc: { quantity: -item.quantity },
       });
     }
 
-    const order = new Order({ customerName, email, phone, address, cartItems });
+    const order = new Order({ customer, cartItems });
     const result = await order.save();
     return result;
   } catch (error) {

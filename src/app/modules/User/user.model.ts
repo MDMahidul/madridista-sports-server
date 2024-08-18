@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { TUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt';
-import { userStatus } from './user.constant';
+import { memberShipStatus, userStatus } from './user.constant';
 import config from '../../config';
 
 export const userSchema = new Schema<TUser, UserModel>(
@@ -12,15 +12,6 @@ export const userSchema = new Schema<TUser, UserModel>(
       unique: true,
     },
     name: { type: String, required: true },
-    gender: {
-      type: String,
-      enum: {
-        values: ['male', 'female', 'others'],
-        message:
-          "The gender field can only be one of the following: 'male', 'female', 'others'",
-      },
-      required: [true, 'Gender is required'],
-    },
     email: {
       type: String,
       required: true,
@@ -42,6 +33,10 @@ export const userSchema = new Schema<TUser, UserModel>(
       type: String,
       enum: userStatus,
       default: 'in-progress',
+    },
+    membership: {
+      type: String,
+      enum: memberShipStatus,
     },
     isDeleted: {
       type: Boolean,

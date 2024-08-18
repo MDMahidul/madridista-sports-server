@@ -13,6 +13,7 @@ export type TProduct = {
   isDeleted: boolean;
 };
 
+
 export interface ProductModel extends Model<TProduct> {
   // eslint-disable-next-line no-unused-vars
   isProductExists(id: string): Promise<boolean>;

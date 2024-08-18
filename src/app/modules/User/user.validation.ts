@@ -5,11 +5,6 @@ const createUserValidationSchema = z.object({
   body: z.object({
     user: z.object({
       name: z.string({ required_error: 'Name is required!' }).trim(),
-      gender: z.enum(['male', 'female', 'others'], {
-        errorMap: () => ({
-          message: "Gender can only be 'male', 'female', or 'others'",
-        }),
-      }),
       email: z
         .string({ required_error: 'Email is required!' })
         .email({ message: 'Invalid email address' }),
@@ -25,13 +20,6 @@ const updateUserValidationSchema = z.object({
   body: z.object({
     user: z.object({
       name: z.string().trim().optional(),
-      gender: z
-        .enum(['male', 'female', 'others'], {
-          errorMap: () => ({
-            message: "Gender can only be 'male', 'female', or 'others'",
-          }),
-        })
-        .optional(),
       email: z.string().email({ message: 'Invalid email address' }).optional(),
       contactNo: z.string().optional(),
       address: z.string().optional(),

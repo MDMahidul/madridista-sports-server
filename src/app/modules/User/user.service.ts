@@ -10,6 +10,8 @@ const createUserIntoDB = async (payload: TUser) => {
   const userData: Partial<TUser> = { ...payload };
   // set generated id
   userData.id = await generateUserId();
+  userData.role = "user"
+  userData.membership = 'general';
   const result = await User.create(userData);
 
   return result;
@@ -19,6 +21,7 @@ const createAdminIntoDB = async (payload: TUser) => {
   const userData: Partial<TUser> = { ...payload };
   // set generated id
   userData.id = await generateAdminId();
+  userData.role='admin';
   const result = await User.create(userData);
 
   return result;

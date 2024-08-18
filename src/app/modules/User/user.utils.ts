@@ -1,22 +1,22 @@
 import { User } from './user.model';
 
 const findLastUserId = async () => {
-  const lastUser = await User.findOne({ role: 'user' }, { id: 1, _id: -1 })
-    .sort({ createdAt: -1 })
+  const lastUser = await User.findOne({ role: 'user' }, { id: 1, _id: 0 })
+    .sort({ createdAt: -1 }) 
     .lean();
 
-  /* if there are any user then return the substring of the id starting from the 2nd character */
   return lastUser?.id ? lastUser.id.substring(2) : undefined;
 };
 
 export const generateUserId = async () => {
-  let currentId = (0).toString();
+  let currentId = '00000'; 
   const lastUserId = await findLastUserId();
 
   if (lastUserId) {
     currentId = lastUserId;
   }
-  /* Increment the currentId by 1 and pad it with leading zeros to ensure it is 5 digits long. */
+
+  // Increment the ID by 1 and pad it to ensure it is 5 digits long
   let incrementId = (Number(currentId) + 1).toString().padStart(5, '0');
 
   incrementId = `U-${incrementId}`;
@@ -33,7 +33,7 @@ const findLastAdminId = async () => {
 };
 
 export const generateAdminId = async () => {
-  let currentId = (0).toString();
+  let currentId ="00000";
   const lastAdminId = await findLastAdminId();
 
   if (lastAdminId) {

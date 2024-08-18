@@ -41,6 +41,7 @@ class QueryBuilder<T> {
   }
 
   //create sorting method
+  // Create sorting method
   sort() {
     const sort =
       (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
@@ -50,12 +51,16 @@ class QueryBuilder<T> {
         return { price: 1 };
       } else if (field === '-price') {
         return { price: -1 };
-      }else{
-        return {[field]:field.startsWith('-') ? -1 : 1}
+      } else if (field === 'ratings') {
+        return { ratings: 1 };
+      } else if (field === '-ratings') {
+        return { ratings: -1 };
+      } else {
+        return { [field]: field.startsWith('-') ? -1 : 1 };
       }
     });
 
-    this.modelQuery = this.modelQuery.sort(Object.assign({},...sortFields));
+    this.modelQuery = this.modelQuery.sort(Object.assign({}, ...sortFields));
 
     return this;
   }

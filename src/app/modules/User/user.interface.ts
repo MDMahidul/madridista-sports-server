@@ -2,12 +2,11 @@
 import { Model } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
-export type TGender = 'Male' | 'Female' | 'Others';
 
 export type TUser = {
+  _id?:string;
   id: string;
   name: string;
-  gender: TGender;
   email: string;
   password: string;
   passwordChangedAt?: Date;
@@ -15,6 +14,7 @@ export type TUser = {
   address: string;
   role: 'superAdmin' | 'admin' | 'user';
   status: 'in-progress' | 'blocked';
+  membership?: 'general'| 'silver'| 'gold'| 'platinum';
   isDeleted: boolean;
 };
 

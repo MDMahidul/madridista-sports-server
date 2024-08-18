@@ -5,4 +5,5 @@ export const USER_ROLE = {
 } as const;
 
 export const userStatus = ['in-progress', 'blocked'];
+export const memberShipStatus = ['general', 'silver', 'gold', 'platinum'];
 export const userSearchableFields = ['email', 'id', 'contactNo', 'name'];

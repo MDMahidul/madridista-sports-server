@@ -34,7 +34,7 @@ const createProductIntoDB = async (payload: TProduct) => {
   return result;
 }; */
 const getAllProductFromDB = async (query: Record<string, unknown>) => {
-  const productQuery = new QueryBuilder(Product.find(), query)
+  const productQuery = new QueryBuilder(Product.find({isDeleted:false}), query)
     .search(ProductSearchableFields)
     .filter()
     .sort()

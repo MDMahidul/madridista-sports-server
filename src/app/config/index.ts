@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 //dotenv.config({ path: path.join((process.cwd(), ".env")) });
 dotenv.config({});
@@ -13,4 +13,5 @@ export default {
   jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
   jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
   reset_pass_ui_link: process.env.RESET_PASS_UI_LINK,
+  super_admin_password: process.env.SUPER_ADMIN_PASSWORD,
 };
