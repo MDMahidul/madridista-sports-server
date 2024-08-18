@@ -5,7 +5,7 @@ import { CartServices } from './cart.service';
 
 const addItemToCart = catchAsync(async (req, res) => {
   const result = await CartServices.addToCartIntoDB(
-    req.body.items[0],
+    req.body.items,
     req.user,
   );
   sendResponse(res, {
@@ -48,7 +48,7 @@ const clearCartItem = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Remove Product from cart successfully !',
+    message: 'Clear cart successfully !',
     data: result,
   });
 });

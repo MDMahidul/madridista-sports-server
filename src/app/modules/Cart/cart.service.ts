@@ -5,35 +5,36 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { Product } from '../Product/product.model';
 
-const addToCartIntoDB = async (item: TCartItem, userData: JwtPayload) => {
+const addToCartIntoDB = async (items: TCartItem[], userData: JwtPayload) => {
   const { email } = userData;
   /* find if user exist one cart db */
   let cart = await Cart.findOne({ user: email });
 
-  /*   get the product to check available stock */
-  const product = await Product.findById(item.product);
-  if (!product) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Product not found !');
-  }
-
-  if (item.quantity > product.quantity) {
-    throw new AppError(
-      httpStatus.BAD_REQUEST,
-      `Not enough product available !`,
-    );
-  }
-
-  /*  If no then, create a new one */
   if (!cart) {
     cart = new Cart({
       user: email,
-      items: [item],
+      items: [],
     });
-  } else {
+  }
+
+  for (const item of items) {
+    /*   get the product to check available stock */
+    const product = await Product.findById(item.product);
+    if (!product) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Product not found !');
+    }
+
+    if (item.quantity > product.quantity) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        `Not enough product available !`,
+      );
+    }
     /*  Check if the product is already in the cart */
     const existingItem = cart.items.find(
       (cartItem) => cartItem.product.toString() === item.product.toString(),
     );
+
     // If product exists, update the quantity
     if (existingItem) {
       const newQuantity = (existingItem.quantity += item.quantity);
@@ -134,9 +135,9 @@ const clearCartFromDB = async (userData: JwtPayload) => {
     throw new AppError(httpStatus.NOT_FOUND, 'No cart data found!');
   }
 
-  cart.items = [];
+  await cart.deleteOne();
 
-  return await cart.save();
+  return;
 };
 
 const getCartFromDB = async (userData: JwtPayload) => {
