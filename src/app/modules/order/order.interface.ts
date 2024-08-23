@@ -1,11 +1,13 @@
-import { TUser } from '../User/user.interface';
-
 export type TCartItem = {
-  productId: string;
+  product: string;
   quantity: number;
 };
 
 export type TCustomerOrderInfo = {
-  customer: TUser;
-  cartItems: TCartItem[];
+  user: string;
+  phoneNumber: string;
+  address: string;
+  paymentMethod: string;
+  items: TCartItem[];
+  totalPrice: number;
 };

@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
 import { CartServices } from './cart.service';
-
+ 
 const addItemToCart = catchAsync(async (req, res) => {
   const result = await CartServices.addToCartIntoDB(
     req.body.items,

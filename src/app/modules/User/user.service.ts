@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { generateAdminId, generateUserId } from './user.utils';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { userSearchableFields } from './user.constant';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createUserIntoDB = async (payload: TUser) => {
   const userData: Partial<TUser> = { ...payload };
@@ -95,11 +96,14 @@ const deleteSingleUserFromDB = async (id: string) => {
   return deleteUser;
 };
 
-const getMe = async (userId: string) => {
-  const result = await User.findOne({ id: userId }).populate('user');
+const getUserProfileFromDB = async (userData: JwtPayload) => {
+  const { email } = userData;
+
+  const result = await User.findOne({ email: email });
 
   return result;
 };
+
 
 const changeStatus = async (id: string, payload: { status: string }) => {
   const result = await User.findByIdAndUpdate(id, payload, { new: true });
@@ -115,6 +119,6 @@ export const UserServices = {
   getSingleUserFromDB,
   updateUserIntoDB,
   deleteSingleUserFromDB,
-  getMe,
+  getUserProfileFromDB,
   changeStatus,
 };

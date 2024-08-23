@@ -12,6 +12,7 @@ export type TUser = {
   passwordChangedAt?: Date;
   contactNo: string;
   address: string;
+  pImage?:string;
   role: 'superAdmin' | 'admin' | 'user';
   status: 'in-progress' | 'blocked';
   membership?: 'general'| 'silver'| 'gold'| 'platinum';

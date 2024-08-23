@@ -91,12 +91,24 @@ const deleteSingleUser = catchAsync(async (req, res) => {
   });
 });
 
+const getUserProfile = catchAsync(async (req, res) => {
+  const result = await UserServices.getUserProfileFromDB(req.user);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'User profile retrieved successfully!',
+    data: result,
+  });
+});
+
+
 export const UserControllers = {
   createUser,
   createAdmin,
   getSingleUser,
   getAllUsers,
   getOnlyUsers,
-  updateUser,
+  updateUser,getUserProfile,
   deleteSingleUser,
 };

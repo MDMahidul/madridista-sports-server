@@ -34,6 +34,7 @@ export const userSchema = new Schema<TUser, UserModel>(
       enum: userStatus,
       default: 'in-progress',
     },
+    pImage: {type:String},
     membership: {
       type: String,
       enum: memberShipStatus,
@@ -62,17 +63,17 @@ userSchema.pre('save', async function (next) {
 });
 
 // filter out deleted docs
-userSchema.pre("find", function (next) {
+userSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-userSchema.pre("findOne", function (next) {
+userSchema.pre('findOne', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
-userSchema.pre("aggregate", function (next) {
+userSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });

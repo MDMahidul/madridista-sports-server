@@ -1,25 +1,28 @@
-import { model, Schema, Types } from 'mongoose';
-import { TCartItem, TCustomerOrderInfo } from './order.interface';
+import { Schema, model } from 'mongoose';
+import { TCustomerOrderInfo } from './order.interface';
 
-// Cart Item Schema
-const OrderSchema = new Schema<TCartItem>({
-  productId: { type: String, required: [true, 'Product id is required!'] },
-  quantity: { type: Number, required: [true, 'Product quantity is required!'] },
-});
-
-// Customer Order Schema
-const CustomerOrderSchema = new Schema<TCustomerOrderInfo>(
+// Order Schema
+const orderSchema = new Schema<TCustomerOrderInfo>(
   {
-    customer: {
-      type: Types.ObjectId,
-      ref: 'User', 
-      required: [true, 'Customer is required!'],
-    },
-    cartItems: { type: [OrderSchema], required: true },
+    user: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    address: { type: String, required: true },
+    paymentMethod: { type: String, required: true },
+    items: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
+        quantity: { type: Number, required: true },
+      },
+    ],
+    totalPrice: { type: Number, required: true },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-export const Order = model<TCustomerOrderInfo>('Order', CustomerOrderSchema);
+const Order = model<TCustomerOrderInfo>('Order', orderSchema);
+
+export default Order;
