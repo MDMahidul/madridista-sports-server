@@ -11,7 +11,7 @@ const createUserIntoDB = async (payload: TUser) => {
   const userData: Partial<TUser> = { ...payload };
   // set generated id
   userData.id = await generateUserId();
-  userData.role = "user"
+  userData.role = 'user';
   userData.membership = 'general';
   const result = await User.create(userData);
 
@@ -22,7 +22,7 @@ const createAdminIntoDB = async (payload: TUser) => {
   const userData: Partial<TUser> = { ...payload };
   // set generated id
   userData.id = await generateAdminId();
-  userData.role='admin';
+  userData.role = 'admin';
   const result = await User.create(userData);
 
   return result;
@@ -66,16 +66,47 @@ const getSingleUserFromDB = async (id: string) => {
   return result;
 };
 
-const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
-  const user = await User.findById(id);
+/* const updateUserIntoDB = async (
+  payload: Partial<TUser>,
+  userInfo: JwtPayload,
+) => {
+  const { email } = userInfo;
+  const user = await User.findOne({ email: email });
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
   }
 
-  const result = await User.findByIdAndUpdate(id, payload, {
+  const result = await User.findOneAndUpdate( {email:email},payload, {
     new: true,
     runValidators: true,
   });
+
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Something went wrong !');
+  }
+
+  return result;
+}; */
+
+const updateUserIntoDB = async (
+  payload: Partial<TUser>,
+  userInfo: JwtPayload,
+) => {
+  const { email } = userInfo;
+
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+
+  const result = await User.findOneAndUpdate(
+    {email:email},
+     payload ,
+    {
+      new: true, 
+      runValidators: true, 
+    },
+  );
 
   return result;
 };
@@ -103,7 +134,6 @@ const getUserProfileFromDB = async (userData: JwtPayload) => {
 
   return result;
 };
-
 
 const changeStatus = async (id: string, payload: { status: string }) => {
   const result = await User.findByIdAndUpdate(id, payload, { new: true });

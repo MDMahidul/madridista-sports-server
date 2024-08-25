@@ -40,7 +40,7 @@ router.get(
 );
 
 router.put(
-  '/:id',
+  '/update-user-profile',auth(USER_ROLE.admin, USER_ROLE.superAdmin,USER_ROLE.user),
   validateRequest(userValidations.updateUserValidationSchema),
   UserControllers.updateUser,
 );

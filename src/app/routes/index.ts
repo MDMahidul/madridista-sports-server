@@ -5,6 +5,7 @@ import { UserRoutes } from '../modules/User/user.routes';
 import { AuthRoutes } from '../modules/Auth/auth.routes';
 import { CartRouters } from '../modules/Cart/cart.routes';
 import { WishlistRouters } from '../modules/Wishlist/wishlist.routes';
+import { BlogRouters } from '../modules/Blog/blog.routes';
 
 const router = Router();
 
@@ -32,6 +33,10 @@ const modelRoutes = [
   {
     path: '/wishlist',
     route: WishlistRouters,
+  },
+  {
+    path: '/blog',
+    route: BlogRouters,
   },
 ];
 

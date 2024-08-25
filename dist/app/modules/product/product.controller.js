@@ -17,6 +17,10 @@ const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const product_service_1 = require("./product.service");
+/* type TProductQuery= {
+  category?: string;
+  name?: string;
+} */
 const createProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield product_service_1.ProductService.createProductIntoDB(req.body);
     (0, sendResponse_1.default)(res, {
@@ -27,23 +31,13 @@ const createProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const getAllProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { category, name } = req.query;
-    const result = yield product_service_1.ProductService.getAllProductFromDB({ category, name });
-    if (result.length === 0) {
-        return (0, sendResponse_1.default)(res, {
-            statusCode: http_status_1.default.NOT_FOUND,
-            success: false,
-            message: category || name
-                ? `No products found matching the criteria`
-                : 'No products found in the database!',
-            data: null,
-        });
-    }
+    const result = yield product_service_1.ProductService.getAllProductFromDB(req.query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: 'Products data retrieved successfully!',
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 }));
 const updateSingleProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

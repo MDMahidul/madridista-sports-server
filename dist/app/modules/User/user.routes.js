@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const user_validation_1 = require("./user.validation");
+const user_controller_1 = require("./user.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const user_constant_1 = require("./user.constant");
+const router = express_1.default.Router();
+router.post('/user-signup', (0, validateRequest_1.default)(user_validation_1.userValidations.createUserValidationSchema), user_controller_1.UserControllers.createUser);
+router.post('/create-admin', (0, validateRequest_1.default)(user_validation_1.userValidations.createUserValidationSchema), user_controller_1.UserControllers.createAdmin);
+router.get('/profile', (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.superAdmin, user_constant_1.USER_ROLE.user), user_controller_1.UserControllers.getUserProfile);
+router.get('/user', user_controller_1.UserControllers.getOnlyUsers);
+router.get('/:id', (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.superAdmin), user_controller_1.UserControllers.getSingleUser);
+router.get('/', (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.superAdmin), user_controller_1.UserControllers.getAllUsers);
+router.put('/update-user-profile', (0, auth_1.default)(user_constant_1.USER_ROLE.admin, user_constant_1.USER_ROLE.superAdmin, user_constant_1.USER_ROLE.user), (0, validateRequest_1.default)(user_validation_1.userValidations.updateUserValidationSchema), user_controller_1.UserControllers.updateUser);
+router.delete('/:id', user_controller_1.UserControllers.deleteSingleUser);
+exports.UserRoutes = router;
